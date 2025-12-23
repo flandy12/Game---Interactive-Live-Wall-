@@ -28,19 +28,40 @@ Route::get('/form', function () {
 })->name('form');
 
 Route::post('/form', function (Request $request) {
-    $data = $request->validate([
-        'name'    => 'required|string|max:255',
-        'email'   => 'required|email|max:255',
-        'message' => 'required|string|max:5000',
-    ]);
 
-    // Simpan ke DB langsung dari $data
+    $data = $request->validate(
+        [
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email|max:255',
+            'message' => 'required|string|max:5000',
+        ],
+        [
+            'name.required'    => 'Nama wajib diisi.',
+            'name.string'      => 'Nama harus berupa teks.',
+            'name.max'         => 'Nama maksimal 255 karakter.',
+
+            'email.required'   => 'Email wajib diisi.',
+            'email.email'      => 'Format email tidak valid.',
+            'email.max'        => 'Email maksimal 255 karakter.',
+
+            'message.required' => 'Pesan wajib diisi.',
+            'message.string'   => 'Pesan harus berupa teks.',
+            'message.max'      => 'Pesan maksimal 5000 karakter.',
+        ]
+    );
+
+    // Simpan ke database
     $message = MasterMessage::create($data);
 
     // Broadcast event
-    MessageSent::dispatch($message->name, $message->email, $message->message);
+    MessageSent::dispatch(
+        $message->name,
+        $message->email,
+        $message->message
+    );
 
     return redirect()->route('success');
+
 })->name('form.submit');
 
 Route::get('/messages', function () {

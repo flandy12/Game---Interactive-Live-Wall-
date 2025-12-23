@@ -4,54 +4,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monash University</title>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <title>Game Interaktif</title>
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('/images/logo.png') }}">
-    <script src="https://cdn.tiny.cloud/1/kzj5cg1ned34o821ht6p81wlszqmnvx6domizaiswl0xup70/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=BBH+Bartle&family=Dancing+Script:wght@400..700&family=Luckiest+Guy&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind -->
     @vite('resources/css/app.css')
+
+    <style>
+        .bg-master {
+            background: url('/images/bg.png') center / cover no-repeat;
+        }
+
+        .luckiest-guy-regular {
+            font-family: "Luckiest Guy", cursive;
+        }
+
+        .archivo-black-regular {
+            font-family: "Archivo Black", sans-serif;
+        }
+    </style>
 </head>
 
-<body>
-    <div class="h-screen flex items-center bg-pink-300">
+<body class="overflow-x-hidden">
+
+    <!-- WRAPPER -->
+    <div class="min-h-screen flex items-center justify-center bg-master px-4 sm:px-6">
+
+        <!-- FORM -->
         <form method="POST" action="{{ route('form.submit') }}"
-            class="w-full max-w-mde mx-auto p-6 bg-white rounded-xl shadow space-y-4">
+            class="w-full max-w-sm sm:max-w-md md:max-w-lg
+                   p-4 sm:p-6 md:p-8
+                   bg-white rounded-xl shadow-xl space-y-4">
+
             @csrf
+
+            <!-- TITLE -->
+            <h1
+                class="text-2xl sm:text-3xl md:text-4xl
+                       font-bold mb-4 text-center
+                       text-[#5b32b2] luckiest-guy-regular">
+                Ceritakan Liburan Kamu Disini ...
+            </h1>
+
+            <!-- NAME -->
             <div>
-                <label class="block text-sm font-medium mb-1">Nama</label>
+                <label class="block mb-1 text-sm sm:text-base archivo-black-regular text-[#5b32b2]">
+                    Nama
+                </label>
                 <input type="text" name="name" value="{{ old('name') }}"
-                    class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200">
-
+                    class="w-full border border-[#5b32b2] rounded-lg
+                           px-3 py-2 text-base sm:text-lg
+                           focus:ring focus:ring-blue-200">
                 @error('name')
-                    <span class="text-red-500">{{ $message }}</span>
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
+            <!-- EMAIL -->
             <div>
-                <label class="block text-sm font-medium mb-1">Email</label>
+                <label class="block mb-1 text-sm sm:text-base archivo-black-regular text-[#5b32b2]">
+                    Email
+                </label>
                 <input type="email" name="email" value="{{ old('email') }}"
-                    class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200">
-
+                    class="w-full border border-[#5b32b2] rounded-lg
+                           px-3 py-2 text-base sm:text-lg
+                           focus:ring focus:ring-blue-200">
                 @error('email')
-                    <span class="text-red-500">{{ $message }}</span>
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
+            <!-- MESSAGE -->
             <div>
-                <label class="block text-sm font-medium mb-1">Pesan</label>
-                <textarea name="message" rows="4" value="{{ old('message') }}"
-                    class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200"></textarea>
+                <label class="block mb-1 text-sm sm:text-base archivo-black-regular text-[#5b32b2]">
+                    Pesan
+                </label>
+                <textarea name="message" rows="4"
+                    class="w-full border border-[#5b32b2] rounded-lg
+                           px-3 py-2 text-base sm:text-lg
+                           focus:ring focus:ring-blue-200">{{ old('message') }}</textarea>
                 @error('message')
-                    <span class="text-red-500">{{ $message }}</span>
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
-            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+            <!-- BUTTON -->
+            <button type="submit"
+                class="w-full text-xl sm:text-2xl md:text-3xl
+                       bg-[#5b32b2] text-white
+                       py-2 sm:py-3
+                       rounded-lg hover:bg-[#8869d5]
+                       transition luckiest-guy-regular">
                 Kirim
             </button>
+
         </form>
     </div>
+
 </body>
+
+</html>
