@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MonashExport;
+use SebastianBergmann\Environment\Console;
+use App\Rules\NoBadWords;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,13 +29,14 @@ Route::get('/form', function () {
     return view('form');
 })->name('form');
 
+
 Route::post('/form', function (Request $request) {
 
     $data = $request->validate(
         [
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email|max:255',
-            'message' => 'required|string|max:5000',
+            'name'    => ['required', 'string', 'max:255'],
+            'email'   => ['required', 'email', 'max:255'],
+            'message' => ['required', 'string', 'max:5000'],
         ],
         [
             'name.required'    => 'Nama wajib diisi.',
@@ -50,25 +53,29 @@ Route::post('/form', function (Request $request) {
         ]
     );
 
-    // Simpan ke database
+    // ✅ SIMPAN DATA ASLI
     $message = MasterMessage::create($data);
 
-    // Broadcast event
+    // ✅ SENSOR HANYA UNTUK FRONTEND
     MessageSent::dispatch(
         $message->name,
         $message->email,
-        $message->message
+        censor_text($message->message)
     );
 
     return redirect()->route('success');
-
 })->name('form.submit');
 
 Route::get('/messages', function () {
-    // Ambil 20 pesan terakhir, urut dari yang paling baru ke lama
-    $messages = MasterMessage::orderBy('created_at', 'desc')->take(20)->get();
-
-    return response()->json($messages);
+    return MasterMessage::latest()
+        ->take(50)
+        ->get()
+        ->map(function ($msg) {
+            return [
+                'name'    => $msg->name,
+                'message' => censor_text($msg->message), // ✅ SENSOR
+            ];
+        });
 });
 
 Route::post('/search', function (Request $request) {
@@ -80,6 +87,7 @@ Route::post('/search', function (Request $request) {
 
     return response()->json($results);
 });
+
 Route::get('/user/{id}', function ($id) {
     $result = MasterMessage::findOrFail($id);
     return response()->json($result);
@@ -101,8 +109,11 @@ Route::get('/success', function () {
 })->name('success');
 
 Route::get('/cms', function () {
-    $dataMaster = MasterMessage::all();
-    return view('master-dashboard', ['dataMaster' => $dataMaster]);
+    $dataMaster = MasterMessage::orderBy('created_at', 'desc')->get();
+
+    return view('master-dashboard', [
+        'dataMaster' => $dataMaster
+    ]);
 });
 
 // FORM EDIT
@@ -145,7 +156,7 @@ Route::get('/download', function () {
     return Excel::download(new MonashExport, 'monash-file.xlsx');
 })->name('download');
 
-Route::delete('/delete/all', function(){
+Route::delete('/delete/all', function () {
     MasterMessage::truncate();
-        return redirect('/cms')->with('success', 'All messages deleted successfully.');
+    return redirect('/cms')->with('success', 'All messages deleted successfully.');
 })->name('deleteAll');

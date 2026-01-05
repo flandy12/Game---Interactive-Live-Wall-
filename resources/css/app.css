@@ -1,4 +1,8 @@
 @import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
@@ -30,4 +34,27 @@ body {
     background: url('/public/images/bg-form.png');
     background-size: cover;
     background-position: center;
+}
+
+.bubble {
+    position: absolute;
+    max-width: 220px;
+    padding: 10px 14px;
+    background: #fff;
+    border-radius: 16px;
+
+    line-height: 1.4;
+    word-break: break-word;
+    white-space: normal;
+
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    pointer-events: none;
+}
+
+.bubble.from-left {
+    text-align: left;
+}
+
+.bubble.from-right {
+    text-align: right;
 }

@@ -3,17 +3,24 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Monash University</title>
+    <title>Jakarta Music Festival 2025</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ asset('/images/logo.png') }}">
     <script src="https://cdn.tiny.cloud/1/kzj5cg1ned34o821ht6p81wlszqmnvx6domizaiswl0xup70/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
-    @vite('resources/css/app-second.css')
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+
+    <style>
+        .bg-master {
+            background: url('/images/bg.png') center / cover no-repeat;
+        }
+    </style>
 </head>
 
-<body class="w-full">
-    <nav class="bg-[#006dae] w-full z-20 top-0 start-0 border-b border-default">
+<body class="w-full bg-master h-screen">
+    <nav class="bg-[#fb351b] w-full z-20 top-0 start-0">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
             <!-- LOGO -->
@@ -54,14 +61,14 @@
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto py-10 px-4">
-        <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base p-4">
+    <div class="max-w-7xl mx-auto py-10 px-4 bg-white max-h-screen mt-5">
+        <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base p-4 space-y-52">
             <!-- TOP BAR -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
 
                 <!-- SEARCH -->
                 <div id="searchForm" class="w-full md:w-[320px] lg:w-[380px] xl:w-[420px]">
-                    <label for="tableSearch" class="sr-only">Search Name</label>
+                    <label for="tableSearch" class="sr-only">Cari Nama</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -73,7 +80,7 @@
                         <input type="text" id="tableSearch" name="search"
                             class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 
                             focus:ring-[#006DAE] focus:border-[#006DAE]"
-                            placeholder="Search Name ..." />
+                            placeholder="Cari Nama ..." />
                     </div>
                 </div>
 
@@ -82,7 +89,7 @@
 
                     <!-- DOWNLOAD -->
                     <a href="{{ route('download') }}"
-                        class="inline-flex items-center justify-center h-12 gap-2 px-4 py-2 bg-[#006DAE] hover:bg-[#006eaec5] 
+                        class="inline-flex items-center justify-center h-12 gap-2 px-4 py-2 bg-[#1bae5e] hover:bg-[#1bae5de7] 
                         text-white font-medium rounded-lg shadow-sm transition w-full sm:w-auto">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -105,7 +112,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0H7m5-4v4" />
                             </svg>
-                            Delete All
+                            Hapus Semua
                         </button>
                     </form>
 
@@ -113,17 +120,15 @@
 
             </div>
 
-
             <!-- TABLE WRAPPER -->
-            <div class="overflow-x-auto border border-gray-400 rounded-base">
+            <div class="overflow-y-auto border border-gray-400 rounded-base">
                 <table class="w-full text-sm text-left rtl:text-right text-body">
                     <thead class="bg-neutral-secondary-soft border-b border-gray-400">
                         <tr>
                             <th class="px-6 py-3 font-medium">No</th>
-                            <th class="px-6 py-3 font-medium">Name</th>
-                            <th class="px-6 py-3 font-medium text-center">Message</th>
-                            <th class="px-6 py-3 font-medium text-center">Image</th>
-                            <th class="px-6 py-3 font-medium">Action</th>
+                            <th class="px-6 py-3 font-medium">Nama</th>
+                            <th class="px-6 py-3 font-medium text-center">Pesan</th>
+                            <th class="px-6 py-3 font-medium text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,9 +137,6 @@
                                 <td class="px-6 py-4 font-medium">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4">{{ $value->name }}</td>
                                 <td class="px-6 py-4 text-center">{!! $value->message !!}</td>
-                                <td class="px-6 py-4 h-36">
-                                    <img src="{{ asset('storage/' . $value->merged_image) }}" class="w-full" />
-                                </td>
                                 <td class="px-6 py-4 text-center">
                                     <button type="button"
                                         onclick="openModal({{ $value->id }}, '{{ $value->name }}', `{{ $value->message }}`)"
@@ -145,7 +147,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            class="font-medium text-red-600 hover:underline">Delete</button>
+                                            class="font-medium text-red-600 hover:underline">Hapus</button>
                                     </form>
                                 </td>
                             </tr>
@@ -159,7 +161,7 @@
 
     <!-- Modal Edit -->
     <div id="editModal" class="hidden fixed inset-0 bg-black/15 flex items-center justify-center z-50">
-        <div class="bg-white w-full max-w-md p-6 rounded-lg shadow-lg">
+        <div class="w-full max-w-md p-6 rounded-lg shadow-lg bg-white">
             <h2 class="text-xl font-semibold mb-4">Edit Message</h2>
 
             <form id="editForm" method="POST">
@@ -179,7 +181,7 @@
                 <div class="flex justify-end space-x-3">
                     <button type="button" onclick="closeModal()"
                         class="px-4 py-2 bg-gray-500 text-white rounded">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+                    <button type="submit" class="px-4 py-2 bg-[#fb351b] text-white rounded">Save</button>
                 </div>
             </form>
         </div>
